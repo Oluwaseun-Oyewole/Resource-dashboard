@@ -7,7 +7,7 @@ export default function Attendance() {
   const { metrics, isLoading } = useGetMetrics();
   const analytics = [...EmployeeCards].map((card) => ({
     ...card,
-    total: metrics?.analytics?.leave[card?.key] ?? 0,
+    total: metrics?.analytics?.attendance[card?.key] ?? 0,
   }));
   return <TrainingComponent analytics={analytics} isLoading={isLoading} />;
 }

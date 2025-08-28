@@ -24,14 +24,26 @@ export const GET = async (req: NextRequest) => {
         data: {
           analytics: {
             leave: {
-              total_leave_granted: 200,
-              pending_leave: 100,
-              required_leave: 50,
+              total_leave_granted: 10,
+              pending_leave: 20,
+              required_leave: 30,
             },
             budget: {
-              weekly_budget: 40000,
-              monthly_budget: 60000,
-              yearly_budget: 90000,
+              weekly_budget: 4000000,
+              monthly_budget: 20000000,
+              yearly_budget: 240000000,
+            },
+            attendance: {
+              total_workforce: 200000,
+              present_workforce: 100,
+              absent_workforce: 50,
+              late_arrivals: 40,
+              on_leave: 10,
+            },
+            absent: {
+              total_absent: 2,
+              total_monthly_absent: 20,
+              total_weekly_absent: 5,
             },
           },
         },

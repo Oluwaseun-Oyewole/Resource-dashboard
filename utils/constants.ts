@@ -48,6 +48,7 @@ export const EmployeeCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Briefcase,
+    isCurrency: false,
   },
   {
     id: 2,
@@ -57,6 +58,7 @@ export const EmployeeCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Office,
+    isCurrency: false,
   },
   {
     id: 3,
@@ -66,6 +68,7 @@ export const EmployeeCards: IMetricsTypes[] = [
     date: "last month",
     total: "15",
     image: Alert,
+    isCurrency: false,
   },
   {
     id: 4,
@@ -75,6 +78,7 @@ export const EmployeeCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Alarm,
+    isCurrency: false,
   },
 
   {
@@ -85,6 +89,7 @@ export const EmployeeCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Space,
+    isCurrency: false,
   },
 ];
 
@@ -97,6 +102,7 @@ export const LeaveCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Briefcase,
+    isCurrency: false,
   },
   {
     id: 2,
@@ -106,6 +112,7 @@ export const LeaveCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Office,
+    isCurrency: false,
   },
   {
     id: 3,
@@ -115,6 +122,7 @@ export const LeaveCards: IMetricsTypes[] = [
     date: "last month",
     total: "3",
     image: Alert,
+    isCurrency: false,
   },
 ];
 
@@ -127,6 +135,7 @@ export const AbsentCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Briefcase,
+    isCurrency: false,
   },
   {
     id: 2,
@@ -136,6 +145,7 @@ export const AbsentCards: IMetricsTypes[] = [
     percentage: "10%",
     date: "last month",
     image: Office,
+    isCurrency: false,
   },
   {
     id: 3,
@@ -145,6 +155,7 @@ export const AbsentCards: IMetricsTypes[] = [
     date: "last month",
     total: "3",
     image: Alert,
+    isCurrency: false,
   },
 ];
 
@@ -160,6 +171,7 @@ export const PayrollCards: IMetricsTypes[] = [
     payroll: true,
     payroll_text: "Pay Payroll",
     isEmployee: true,
+    isCurrency: true,
   },
   {
     id: 2,
@@ -171,6 +183,7 @@ export const PayrollCards: IMetricsTypes[] = [
     view: true,
     view_text: "View",
     isEmployee: true,
+    isCurrency: true,
   },
   {
     id: 3,
@@ -180,6 +193,7 @@ export const PayrollCards: IMetricsTypes[] = [
     image: Paid,
     employee_total: 110,
     isEmployee: true,
+    isCurrency: true,
   },
 ];
 
@@ -195,6 +209,7 @@ export const PayrollCompensationCards: IMetricsTypes[] = [
     payroll: true,
     // schedule_text: "View Analysis",
     payroll_text: "Pay Analysis",
+    isCurrency: true,
   },
   {
     id: 2,
@@ -204,6 +219,7 @@ export const PayrollCompensationCards: IMetricsTypes[] = [
     image: Pending,
     employee_total: 40,
     view: true,
+    isCurrency: true,
     view_text: "Analysis",
   },
 ];
@@ -219,6 +235,7 @@ export const BenefitPayrollCards: IMetricsTypes[] = [
     payroll: true,
     // schedule_text: "View List",
     payroll_text: "Payroll List",
+    isCurrency: true,
   },
   {
     id: 2,
@@ -228,6 +245,7 @@ export const BenefitPayrollCards: IMetricsTypes[] = [
     image: Pending,
     view: true,
     view_text: "View",
+    isCurrency: true,
   },
   {
     id: 3,
@@ -237,6 +255,7 @@ export const BenefitPayrollCards: IMetricsTypes[] = [
     image: Paid,
     view: true,
     view_text: "View",
+    isCurrency: true,
   },
 ];
 

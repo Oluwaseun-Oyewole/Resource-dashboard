@@ -47,6 +47,7 @@ export type IMetricsTypes = {
   key: string;
   date?: string;
   percentage?: string;
+  isCurrency: boolean;
 };
 
 export type IMetrics = {

@@ -1,5 +1,5 @@
 "use client";
-import PayrollCard from "@/app/dashboard/payroll/payroll-card";
+import MetricsCard from "@/components/MetricsCard";
 import Hr360Modal, { IHr360Modal } from "@/components/modal";
 import { IMetricsTypes } from "@/services/types";
 import { useRef } from "react";
@@ -17,7 +17,7 @@ export default function TrainingComponent({
   return (
     <>
       <Hr360Modal ref={modalRef} />
-      <PayrollCard metrics={analytics} isLoading={isLoading} />
+      <MetricsCard metrics={analytics} isLoading={isLoading} />
       <TableFilters />
     </>
   );

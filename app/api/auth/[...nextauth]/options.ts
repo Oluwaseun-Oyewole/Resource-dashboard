@@ -150,8 +150,8 @@ export const options: NextAuthOptions = {
           { name: user?.name, email: user?.email },
           "24hr"
         );
-        token.token = customUserToken;
-        cookieStore.set(COOKIES_KEYS.TOKEN, customUserToken);
+        // token.token = customUserToken;
+        // cookieStore.set(COOKIES_KEYS.TOKEN, customUserToken);
       }
       if (trigger === "update" && session?.name) {
         token.role = session.role;

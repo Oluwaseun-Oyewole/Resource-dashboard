@@ -158,7 +158,7 @@ const Filter = ({
           </Button>
         </div>
       </div>
-      <div className="pt-5">
+      <div className="pt-5 pb-1 font-medium">
         <Link href={routes.attendance} className="text-primary-100 !text-sm">
           Attendance Form
         </Link>

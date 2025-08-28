@@ -1,5 +1,5 @@
 "use client";
-import PayrollCard from "@/app/dashboard/payroll/payroll-card";
+import MetricsCard from "@/components/MetricsCard";
 import Hr360Modal, { IHr360Modal } from "@/components/modal";
 import { IMetricsTypes } from "@/services/types";
 import { useRef } from "react";
@@ -37,7 +37,7 @@ export default function DashboardComponent({
   return (
     <>
       <Hr360Modal ref={modalRef} />
-      <PayrollCard
+      <MetricsCard
         metrics={analytics}
         handlePayoutModal={handleViewListModal}
         handleViewModal={handlePayListModal}
