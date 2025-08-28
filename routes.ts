@@ -14,5 +14,6 @@ export const routes = {
   forgotPassword: "/auth/forgot-password",
   resetPassword: "/auth/reset-password",
   verify: "/auth/verify-email",
+  attendance: "/dashboard/attendance",
   authRoutes: ["/auth/login", "/auth/register"],
 };

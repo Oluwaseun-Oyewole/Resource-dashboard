@@ -14,6 +14,7 @@ import * as Yup from "yup";
 
 const SignUp = () => {
   const router = useRouter();
+
   useLayoutEffect(() => {
     if (window && typeof window !== undefined) {
       router.replace("/auth/register");

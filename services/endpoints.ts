@@ -10,4 +10,5 @@ export class Endpoints {
   static resendOTP = BASE_URL + "resendOTP";
   static employees = BASE_URL + "employees";
   static addEmployee = BASE_URL + "add-employee";
+  static metrics = BASE_URL + "metrics";
 }

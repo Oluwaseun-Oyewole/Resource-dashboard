@@ -1,6 +1,5 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
-import { useEffect } from "react";
 
 declare module "next-auth" {
   interface Session {
@@ -11,7 +10,7 @@ declare module "next-auth" {
       name: string;
       accountType: String;
       employmentType: string;
-      accessToken: string;
+      token: string;
     } & DefaultSession;
   }
 
@@ -19,7 +18,7 @@ declare module "next-auth" {
     role: string;
     employmentType: string;
     accountType: String;
-    accessToken: string;
+    token: string;
   }
 }
 
@@ -29,6 +28,6 @@ declare module "next-auth/jwt" {
     employmentType: string;
     accountType: String;
     address: string;
-    accessToken: string;
+    token: string;
   }
 }

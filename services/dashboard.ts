@@ -21,3 +21,12 @@ export const addEmployee = async (data: AddEmployeeInterface) => {
     handleRequestError(error);
   }
 };
+
+export const getMetrics = async () => {
+  try {
+    const response = await Request.get(Endpoints.metrics);
+    return response?.data;
+  } catch (error) {
+    handleRequestError(error);
+  }
+};

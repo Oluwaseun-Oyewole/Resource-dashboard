@@ -10,6 +10,8 @@ interface IJwtService {
   verify<Payload extends JwtPayload = JwtPayload>(
     token: AccessToken
   ): Promise<Payload | false>;
+
+  isExpired(token: AccessToken): Promise<boolean>;
 }
 
 export type { AccessToken, IJwtService, JwtPayload };

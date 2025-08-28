@@ -72,6 +72,7 @@ export const options: NextAuthOptions = {
     // events are purely for side effects like logging, database updates, analytics etc.
 
     async signIn({ user, account, profile }) {
+      // console.log("log in", user, account, profile);
       // Runs AFTER successful sign-in
     },
 
@@ -122,6 +123,13 @@ export const options: NextAuthOptions = {
       return true;
     },
 
+    async session({ session, token }) {
+      return {
+        ...session,
+        token: token.accessToken,
+      };
+    },
+
     async jwt({ token, user, account, trigger, session }) {
       // this runs every time a JWT is created or accessed.
       // token: existing JWT token
@@ -140,10 +148,9 @@ export const options: NextAuthOptions = {
 
         const customUserToken = await jwtService.sign(
           { name: user?.name, email: user?.email },
-          "24hrs"
+          "24hr"
         );
-        token.accessToken = customUserToken;
-        token.accessTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
+        token.token = customUserToken;
         cookieStore.set(COOKIES_KEYS.TOKEN, customUserToken);
       }
       if (trigger === "update" && session?.name) {
@@ -151,9 +158,8 @@ export const options: NextAuthOptions = {
         token.employmentType = session.employmentType;
         token.name = session.name;
       }
-      // TOKEN REFRESH: check if token needs refreshing
-      if (token.accessTokenExpires && Date.now() > +token.accessTokenExpires) {
-        // Refresh custom token
+      const isTokenValid = await jwtService.isExpired(token.token);
+      if (isTokenValid) {
         const newToken = await jwtService.sign(
           {
             userId: token.id,
@@ -162,8 +168,7 @@ export const options: NextAuthOptions = {
           },
           "24h"
         );
-        token.accessToken = newToken;
-        token.accessTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
+        token.token = newToken;
         cookieStore.set(COOKIES_KEYS.TOKEN, newToken);
       }
 

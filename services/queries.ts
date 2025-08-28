@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getEmployees } from "./dashboard";
+import { getEmployees, getMetrics } from "./dashboard";
 import { EmployeeInterface } from "./types";
 
 export const useGetEmployees = (params: EmployeeInterface) => {
@@ -11,8 +11,21 @@ export const useGetEmployees = (params: EmployeeInterface) => {
     queryKey: ["get-employees", params],
     queryFn: () => getEmployees(params),
     retry: 1,
-    // enabled: !!params,
     refetchOnWindowFocus: false,
   });
   return { employees, employeesIsLoading, refetch };
+};
+
+export const useGetMetrics = () => {
+  const {
+    data: metrics,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["get-metrics"],
+    queryFn: () => getMetrics(),
+    retry: 1,
+    refetchOnWindowFocus: false,
+  });
+  return { metrics, isLoading, refetch };
 };

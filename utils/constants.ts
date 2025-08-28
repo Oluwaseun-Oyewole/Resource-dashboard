@@ -11,6 +11,7 @@ import Office from "@/assets/office-chair.svg";
 import Paid from "@/assets/paid.svg";
 import Pending from "@/assets/pay.svg";
 import Check from "@/assets/read.svg";
+import { IMetricsTypes } from "@/services/types";
 
 type PageTitle = {
   [key: string]: string;
@@ -38,18 +39,11 @@ export const PageTitle: PageTitle = {
   messages: "Messages",
 };
 
-export type ICardTypes = {
-  id: number;
-  title: string;
-  total: string;
-  percentage: string;
-  date: string;
-  image: string;
-};
-export const EmployeeCards: ICardTypes[] = [
+export const EmployeeCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Total Workforce",
+    key: "total_workforce",
     total: "150",
     percentage: "10%",
     date: "last month",
@@ -58,6 +52,7 @@ export const EmployeeCards: ICardTypes[] = [
   {
     id: 2,
     title: "Present Workforce",
+    key: "present_workforce",
     total: "125",
     percentage: "10%",
     date: "last month",
@@ -66,15 +61,16 @@ export const EmployeeCards: ICardTypes[] = [
   {
     id: 3,
     title: "Absent Workforce",
+    key: "absent_workforce",
     percentage: "10%",
     date: "last month",
-
     total: "15",
     image: Alert,
   },
   {
     id: 4,
     title: "Late Arrivals",
+    key: "late_arrivals",
     total: "5",
     percentage: "10%",
     date: "last month",
@@ -84,6 +80,7 @@ export const EmployeeCards: ICardTypes[] = [
   {
     id: 5,
     title: "On Leave",
+    key: "on_leave",
     total: "5",
     percentage: "10%",
     date: "last month",
@@ -91,10 +88,11 @@ export const EmployeeCards: ICardTypes[] = [
   },
 ];
 
-export const LeaveCards: ICardTypes[] = [
+export const LeaveCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Total Leave Granted",
+    key: "total_leave_granted",
     total: "15",
     percentage: "10%",
     date: "last month",
@@ -103,6 +101,7 @@ export const LeaveCards: ICardTypes[] = [
   {
     id: 2,
     title: "Pending Leave",
+    key: "pending_leave",
     total: "10",
     percentage: "10%",
     date: "last month",
@@ -111,6 +110,7 @@ export const LeaveCards: ICardTypes[] = [
   {
     id: 3,
     title: "Required Leave",
+    key: "required_leave",
     percentage: "30%",
     date: "last month",
     total: "3",
@@ -118,10 +118,11 @@ export const LeaveCards: ICardTypes[] = [
   },
 ];
 
-export const AbsentCards: ICardTypes[] = [
+export const AbsentCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Total Absent",
+    key: "total_absent",
     total: "8",
     percentage: "10%",
     date: "last month",
@@ -130,6 +131,7 @@ export const AbsentCards: ICardTypes[] = [
   {
     id: 2,
     title: "Total Monthly Absent",
+    key: "total_monthly_absent",
     total: "8",
     percentage: "10%",
     date: "last month",
@@ -138,6 +140,7 @@ export const AbsentCards: ICardTypes[] = [
   {
     id: 3,
     title: "Total Weekly Absent",
+    key: "total_weekly_absent",
     percentage: "30%",
     date: "last month",
     total: "3",
@@ -145,37 +148,23 @@ export const AbsentCards: ICardTypes[] = [
   },
 ];
 
-export type IPayrollCardTypes = {
-  id: number;
-  title: string;
-  total: number;
-  image: string;
-  employee_total?: number;
-  schedule?: boolean;
-  payroll?: boolean;
-  view?: boolean;
-  isEmployee?: boolean;
-  schedule_text?: string;
-  payroll_text?: string;
-  view_text?: string;
-};
-
-export const PayrollCards: IPayrollCardTypes[] = [
+export const PayrollCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Total Payroll",
+    key: "total_payroll",
     total: 8000000,
     employee_total: 150,
     image: Money,
     schedule: true,
     payroll: true,
-    schedule_text: "View Schedule",
     payroll_text: "Pay Payroll",
     isEmployee: true,
   },
   {
     id: 2,
     title: "Pending Payroll",
+    key: "pending_roll",
     total: 3000000,
     image: Pending,
     employee_total: 40,
@@ -186,6 +175,7 @@ export const PayrollCards: IPayrollCardTypes[] = [
   {
     id: 3,
     title: "Paid Payroll",
+    key: "total_payroll",
     total: 5000000,
     image: Paid,
     employee_total: 110,
@@ -193,21 +183,23 @@ export const PayrollCards: IPayrollCardTypes[] = [
   },
 ];
 
-export const PayrollCompensationCards: IPayrollCardTypes[] = [
+export const PayrollCompensationCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Swot Analysis Cost",
+    key: "Swot analysis_cost",
     total: 500000,
     employee_total: 150,
     image: Money,
     schedule: true,
     payroll: true,
-    schedule_text: "View Analysis",
+    // schedule_text: "View Analysis",
     payroll_text: "Pay Analysis",
   },
   {
     id: 2,
     title: "Financial Cost",
+    key: "financial_cost",
     total: 2000000,
     image: Pending,
     employee_total: 40,
@@ -216,20 +208,22 @@ export const PayrollCompensationCards: IPayrollCardTypes[] = [
   },
 ];
 
-export const BenefitPayrollCards: IPayrollCardTypes[] = [
+export const BenefitPayrollCards: IMetricsTypes[] = [
   {
     id: 1,
     title: "Weekly Benefit Budget",
+    key: "weekly_budget",
     total: 50000,
     image: Money,
     schedule: true,
     payroll: true,
-    schedule_text: "View List",
+    // schedule_text: "View List",
     payroll_text: "Payroll List",
   },
   {
     id: 2,
     title: "Monthly Benefit Budget",
+    key: "monthly_budget",
     total: 100000,
     image: Pending,
     view: true,
@@ -238,6 +232,7 @@ export const BenefitPayrollCards: IPayrollCardTypes[] = [
   {
     id: 3,
     title: "Yearly Benefit Budget",
+    key: "yearly_budget",
     total: 1000000,
     image: Paid,
     view: true,
@@ -382,7 +377,13 @@ export const filters = [
 export const COOKIES_KEYS = {
   TOKEN: "token",
 };
-
+export const PARAMS_KEYS = {
+  ROLE: "role",
+  SEARCH: "searchQuery",
+  PAGE: "page",
+  RESULT_PER_PAGE: "resultPerPage",
+  DATE: "date",
+};
 export const ROLES = [
   { label: "HR Manager", value: "HRManager" },
   {

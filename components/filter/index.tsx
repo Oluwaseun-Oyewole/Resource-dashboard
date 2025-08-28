@@ -1,128 +1,64 @@
 "use client";
-import {
-  DashboardSlice as api,
-  useGetFilterEmployeesQuery,
-  useGetSearchEmployeesQuery,
-} from "@/app/dashboard/store/query";
-import { startFilter, stopFilter } from "@/app/dashboard/store/slice";
 import CSVImage from "@/assets/csv.svg";
-import { useAppDispatch, useAppSelector } from "@/lib/hook";
-import { PageTitle, filters } from "@/utils/constants";
-import { DatePicker, DatePickerProps, Dropdown } from "antd";
+import { routes } from "@/routes";
+import { EmployeeInterface } from "@/services/types";
+import { PARAMS_KEYS, PageTitle, filters } from "@/utils/constants";
+import { DatePicker, DatePickerProps, Dropdown, Input } from "antd";
+import classNames from "classnames";
 import dayjs from "dayjs";
-import { Form, Formik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineRefresh } from "react-icons/md";
 import { useDebouncedCallback } from "use-debounce";
 import Button from "../button";
-import FormikController from "../form/form-controller";
 import Hr360Modal, { IHr360Modal } from "../modal";
 
 const Filter = ({
-  currentPage,
-  totalPages,
-  handleRefresh,
+  setParams,
+  setParam,
+  onRefresh,
+  params,
+  data,
 }: {
-  currentPage: number;
-  totalPages: number;
-  handleRefresh: () => void;
+  params: EmployeeInterface;
+  setParams: Dispatch<SetStateAction<EmployeeInterface>>;
+  setParam: (key: string, value: string) => void;
+  onRefresh: () => void;
+  data: [];
 }) => {
   const pathname = usePathname();
-  const { replace } = useRouter();
   const getTitle = pathname.split("/");
   let getTitleEnum = getTitle[getTitle.length - 1];
-  const searchParams = useSearchParams();
-  const [dropdownFilter, setDropdownFilter] = useState<string>(
-    searchParams.get("role")! ?? ""
-  );
-  const { data, isFilter }: any = useAppSelector(
-    (state) => state.rootReducer.dashboard
-  );
-  const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("searchQuery")?.toString() ?? ""
-  );
-  const [page, setPage] = useState(+searchParams.get("page")! ?? currentPage);
-  const [role, setRole] = useState(searchParams.get("role")! ?? "");
-  const {} = useGetSearchEmployeesQuery(
-    {
-      page: page <= 0 || page > totalPages ? 1 : page,
-      searchQuery: searchQuery!,
-    },
-    { skip: searchQuery === "" || !isFilter }
-  );
-  const {} = useGetFilterEmployeesQuery(
-    {
-      page: page <= 0 || page > totalPages ? 1 : page,
-      role: dropdownFilter,
-      date,
-    },
-    { skip: role === "" || !date || !isFilter }
-  );
-
-  const handleSearch = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams);
-    dispatch(api.util.resetApiState());
-    if (term) {
-      dispatch(startFilter());
-      setSearchQuery(term);
-      setPage(currentPage);
-      params.set("searchQuery", term);
-      params.set("page", currentPage.toString());
-      params.delete("date", date);
-      params.delete("role", role);
-    } else {
-      params.delete("searchQuery");
-      params.delete("date");
-      dispatch(stopFilter());
-      refresh();
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
-
+  const [searchTerm, setSearchTerm] = useState(params?.query);
   const onChange: DatePickerProps["onChange"] = (_, dateString) => {
-    const params = new URLSearchParams(searchParams);
-    setDate(dateString as string);
-    setPage(currentPage);
-    dispatch(startFilter());
-    dispatch(api.util.resetApiState());
-    if (date === "" || !dateString) {
-      refresh();
-    } else {
-      params.set("date", dateString as string);
-      params.set("role", role);
-      params.delete("searchQuery", searchQuery);
-      replace(`${pathname}?${params.toString()}`);
-    }
+    setParams((prev: EmployeeInterface) => ({
+      ...prev,
+      date: dateString as string,
+    }));
+    setParam(PARAMS_KEYS.DATE, dateString.toString());
   };
-
   const dateFormat = "YYYY-MM-DD";
   const modalRef = useRef<IHr360Modal>(null);
-  const dispatch = useAppDispatch();
-  const refresh = () => {
-    dispatch(api.util.resetApiState());
-    dispatch(stopFilter());
-    handleRefresh();
-    replace(`${pathname}?page=${currentPage}`);
+  const handleDropdown = (role: string) => {
+    setParams((prev: EmployeeInterface) => ({
+      ...prev,
+      role,
+    }));
+    setParam(PARAMS_KEYS.ROLE, role);
   };
 
-  const handleDropdown = (key: string) => {
-    setPage(currentPage);
-    dispatch(startFilter());
-    dispatch(api.util.resetApiState());
-    setRole(key);
-    const params = new URLSearchParams(searchParams);
-    params.set("role", key);
-    params.set("date", date);
-    params.delete("searchQuery", searchQuery);
-    replace(`${pathname}?${params.toString()}`);
-    setDropdownFilter(key);
-  };
+  const onSearch = useDebouncedCallback((query: string) => {
+    setSearchTerm(query);
+    setParams((prev: EmployeeInterface) => ({
+      ...prev,
+      query,
+    }));
+    setParam(PARAMS_KEYS.SEARCH, query);
+  }, 300);
 
   return (
     <>
@@ -130,50 +66,19 @@ const Filter = ({
         <Hr360Modal ref={modalRef} />
         <div className="basis-full lg:basis-[40%] flex items-center gap-2">
           <div className="w-[70%]">
-            <Formik
-              initialValues={{
-                searchTerm: searchQuery,
-              }}
-              onSubmit={(values, { resetForm }) => {
-                const params = new URLSearchParams(searchParams);
-                setSearchQuery(values.searchTerm);
-                setPage(currentPage);
-                params.set("searchQuery", searchQuery);
-                params.set("page", currentPage.toString());
-                params.delete("date", date);
-                params.delete("role", role);
-                replace(`${pathname}?${params.toString()}`);
-                resetForm();
-              }}
-            >
-              {(formik) => {
-                return (
-                  <Form>
-                    <div>
-                      <FormikController
-                        control="input"
-                        type="search"
-                        label=""
-                        name="searchTerm"
-                        // value={formik.values.searchTerm}
-                        defaultValue={formik.values.searchTerm}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          handleSearch(e.target.value);
-                          formik.handleChange;
-                        }}
-                        onBlur={formik.handleBlur}
-                        placeholder="Search by name, role, department..."
-                        height={53}
-                      />
-                    </div>
-                  </Form>
-                );
-              }}
-            </Formik>
+            <Input
+              className={classNames(
+                `!rounded-lg border-gray-300 border-[1.3px] focus:border-btn hover:border-btn px-3 placeholder:font-light placeholder:!text-gray-500 !h-[40px]`
+              )}
+              type="search"
+              value={searchTerm}
+              onChange={(e) => onSearch(e.target.value)}
+              placeholder="Search by name, role"
+            />
           </div>
           <Button
-            className="border-[1px] border-gray-300  cursor-pointer !flex rounded-lg !py-[16px] !w-[25%] !text-black items-center justify-center"
-            onClick={refresh}
+            className="border-[1px] border-gray-300 cursor-pointer !flex rounded-lg !h-[40px] !w-[25%] !text-black items-center justify-center"
+            onClick={onRefresh}
           >
             <p>Refresh</p>
             <MdOutlineRefresh />
@@ -205,25 +110,23 @@ const Filter = ({
                   },
                 };
               }),
-              onSelect: (ev) => {
-                setDropdownFilter(ev.selectedKeys[0]);
-              },
+              onSelect: (ev) => {},
               rootClassName: "!h-[250px]",
             }}
             trigger={["click"]}
             // placement="bottom"
           >
-            <button className="flex justify-between items-center text-[16px] gap-2">
-              {dropdownFilter || <span className="">All Roles</span>}
+            <button className="flex justify-between items-center text-[16px] !h-[40px] gap-2">
+              {params?.role || <span className="">All Roles</span>}
               {<IoMdArrowDropdown className="" />}
             </button>
           </Dropdown>
 
           <div className="w-full lg:w-auto">
             <DatePicker
-              defaultValue={dayjs()}
+              value={params?.date ? dayjs(params?.date) : dayjs()}
               format={dateFormat}
-              className="!w-full !py-[16px] !border-gray-300"
+              className="!w-full !h-[40px] !border-gray-300"
               placement="bottomRight"
               onChange={onChange}
               onPickerValueChange={() => {}}
@@ -231,9 +134,9 @@ const Filter = ({
           </div>
 
           <div className="hidden md:block w-full lg:w-auto">
-            <Button className="flex gap-2 border-[1px] border-gray-300 !py-[16px] !text-xs md:!text-sm justify-center lg:justify-start">
+            <Button className="flex gap-2 border-[1px] border-gray-300 !h-[40px] !text-xs md:!text-sm justify-center items-center">
               <CSVLink
-                data={data.employees ?? []}
+                data={data}
                 className="text-black flex gap-2"
                 filename={`${PageTitle[getTitleEnum]} csv-file`}
               >
@@ -244,9 +147,9 @@ const Filter = ({
         </div>
 
         <div className="w-[150px] md:hidden">
-          <Button className="flex gap-2 border-[1px] border-gray-300 !py-[16px] !text-xs md:!text-sm justify-center">
+          <Button className="flex gap-2 border-[1px] border-gray-300 !h-[40px] !text-xs md:!text-sm justify-center items-center">
             <CSVLink
-              data={[]}
+              data={data}
               className="text-black flex gap-2"
               filename={`${PageTitle[getTitleEnum]} csv-file`}
             >
@@ -255,9 +158,11 @@ const Filter = ({
           </Button>
         </div>
       </div>
-      <Link href="/dashboard/attendance" className="text-primary-100 !text-sm">
-        Attendance Form
-      </Link>
+      <div className="pt-5">
+        <Link href={routes.attendance} className="text-primary-100 !text-sm">
+          Attendance Form
+        </Link>
+      </div>
     </>
   );
 };

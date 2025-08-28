@@ -13,6 +13,9 @@ class JwtService implements IJwtService {
     payload: Payload,
     expire: Date
   ): Promise<AccessToken> {
+    //24 hrs token expiration limit
+    // const currentDate = new Date();
+    // const expiration = currentDate.setHours(currentDate.getHours() + 24);
     return await new SignJWT(payload)
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setExpirationTime(expire)
@@ -26,6 +29,20 @@ class JwtService implements IJwtService {
     }
     const { payload } = await jwtVerify(token, this._secret);
     return payload as Payload;
+  }
+
+  async isExpired(token: string): Promise<boolean> {
+    try {
+      if (!token) return true;
+      const { payload } = await jwtVerify(token, this._secret);
+      if (payload.exp) {
+        const expirationTime = payload.exp * 1000;
+        Date.now() >= expirationTime;
+      }
+      return true;
+    } catch (error) {
+      return true;
+    }
   }
 }
 
