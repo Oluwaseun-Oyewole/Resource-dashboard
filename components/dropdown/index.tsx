@@ -8,7 +8,6 @@ type IDropType = {
 };
 const Dropdown: React.FC<IDropType> = ({ subRoutes, dropdown }) => {
   const pathname = usePathname();
-
   return (
     <ul
       className={`${

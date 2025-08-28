@@ -37,7 +37,7 @@ class JwtService implements IJwtService {
       const { payload } = await jwtVerify(token, this._secret);
       if (payload.exp) {
         const expirationTime = payload.exp * 1000;
-        Date.now() >= expirationTime;
+        return Date.now() >= expirationTime;
       }
       return true;
     } catch (error) {

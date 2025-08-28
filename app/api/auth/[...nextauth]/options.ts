@@ -150,16 +150,16 @@ export const options: NextAuthOptions = {
           { name: user?.name, email: user?.email },
           "24hr"
         );
-        // token.token = customUserToken;
-        // cookieStore.set(COOKIES_KEYS.TOKEN, customUserToken);
+        token.token = customUserToken;
+        cookieStore.set(COOKIES_KEYS.TOKEN, customUserToken);
       }
       if (trigger === "update" && session?.name) {
         token.role = session.role;
         token.employmentType = session.employmentType;
         token.name = session.name;
       }
-      const isTokenValid = await jwtService.isExpired(token.token);
-      if (isTokenValid) {
+      const isTokenExpired = await jwtService.isExpired(token.token);
+      if (isTokenExpired) {
         const newToken = await jwtService.sign(
           {
             userId: token.id,

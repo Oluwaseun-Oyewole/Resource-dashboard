@@ -4,11 +4,11 @@ import Loader from "@/components/loader";
 import { Sidebar } from "@/components/sidebar";
 import { PageTitle } from "@/utils/constants";
 import { Breadcrumb } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { LuDot } from "react-icons/lu";
 import { outfit } from "../fonts";
 import "../globals.css";
@@ -22,17 +22,7 @@ export default function RootLayout({
   const pathname = usePathname();
   const getTitle = pathname.split("/");
   let getTitleEnum = getTitle[getTitle.length - 1];
-  const [currentDateTime, setCurrentDateTime] = useState<string>("");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // const dateTimeString = moment().format("MMMM Do YYYY, h:mm a");
-      const dateTimeString = moment().format("MMMM Do YYYY");
-      setCurrentDateTime(dateTimeString);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const currentDateTime = dayjs().format("MMMM Do YYYY");
 
   return (
     <Suspense

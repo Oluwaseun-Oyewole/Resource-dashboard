@@ -34,6 +34,7 @@ const Filter = ({
   const getTitle = pathname.split("/");
   let getTitleEnum = getTitle[getTitle.length - 1];
   const [searchTerm, setSearchTerm] = useState(params?.query);
+
   const onChange: DatePickerProps["onChange"] = (_, dateString) => {
     setParams((prev: EmployeeInterface) => ({
       ...prev,
@@ -52,7 +53,6 @@ const Filter = ({
   };
 
   const onSearch = useDebouncedCallback((query: string) => {
-    setSearchTerm(query);
     setParams((prev: EmployeeInterface) => ({
       ...prev,
       query,
@@ -72,7 +72,11 @@ const Filter = ({
               )}
               type="search"
               value={searchTerm}
-              onChange={(e) => onSearch(e.target.value)}
+              onChange={(e) => {
+                const { value } = e.target;
+                onSearch(value);
+                setSearchTerm(value);
+              }}
               placeholder="Search by name, role"
             />
           </div>
