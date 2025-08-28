@@ -13,6 +13,7 @@ export default withAuth(
     const getCookiesToken = cookieStore.get(COOKIES_KEYS.TOKEN);
     const token = getCookiesToken?.value;
     const isTokenExpired = await jwtService.isExpired(token!);
+    console.log("first", isTokenExpired);
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     if (isApiAuthRoute) {
       return NextResponse.next();
@@ -20,17 +21,17 @@ export default withAuth(
 
     // Allow auth pages to be accessed without token
     if (nextUrl.pathname.startsWith("/auth/")) {
-      if (token && !isTokenExpired) {
+      if (!isTokenExpired) {
         return NextResponse.redirect(new URL(routes.dashboard, req.url));
       }
       return NextResponse.next();
     }
 
-    if (!token || isTokenExpired) {
+    if (isTokenExpired) {
       return NextResponse.redirect(new URL(routes.login, req.url));
     }
     if (nextUrl.pathname.startsWith(routes.dashboard)) {
-      if (!token || isTokenExpired) {
+      if (isTokenExpired) {
         return NextResponse.redirect(new URL(routes.login, req.url));
       }
       try {
@@ -41,18 +42,19 @@ export default withAuth(
     }
     // For authenticated users accessing other protected routes
     return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        if (req.nextUrl.pathname.startsWith("/auth/")) {
-          return true;
-        }
-        // For all other routes, require token
-        return !!token;
-      },
-    },
   }
+  // {
+  //   callbacks: {
+  //     authorized: ({ token, req }) => {
+
+  //       if (req.nextUrl.pathname.startsWith("/auth/")) {
+  //         return true;
+  //       }
+  //       // For all other routes, require token
+  //       return !!token;
+  //     },
+  //   },
+  // }
 );
 
 export const config = {

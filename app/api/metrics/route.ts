@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest) => {
               yearly_budget: 240000000,
             },
             attendance: {
-              total_workforce: 200000,
+              total_workforce: 200,
               present_workforce: 100,
               absent_workforce: 50,
               late_arrivals: 40,
