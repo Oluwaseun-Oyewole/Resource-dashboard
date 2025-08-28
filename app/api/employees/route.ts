@@ -9,7 +9,7 @@ export const GET = async (req: NextRequest) => {
   const { searchParams } = await new URL(req.url);
   const resultsPerPage = Number(searchParams.get("resultsPerPage"))!;
   const page = Number(searchParams.get("page"))!;
-  const searchQuery = searchParams.get("searchQuery")!;
+  const searchQuery = searchParams.get("query")!;
   const date = searchParams.get("date");
   const role = searchParams.get("role")!;
   const skip = (page - 1) * resultsPerPage;
@@ -50,6 +50,8 @@ export const GET = async (req: NextRequest) => {
         $lt: new Date(date).setDate(new Date(date).getDate() + 1),
       };
     }
+
+    console.log("first", filters);
 
     const employees = await DashboardModel.find(filters)
       .limit(resultsPerPage)

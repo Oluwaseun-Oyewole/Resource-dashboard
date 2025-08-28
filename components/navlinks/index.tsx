@@ -14,13 +14,22 @@ import { IRoutesType } from "../sidebar/links";
 type INavMenuTypes = {
   route: IRoutesType;
 };
+
 const NavMenuItems: React.FC<INavMenuTypes> = ({ route }) => {
   const { path, icon, title, subRoutes, ActiveIcon, disabled } = route;
   const [dropdown, setDropdown] = useState(false);
   const pathname = usePathname();
   const menuRef = useRef<HTMLLIElement | null>(null);
-  const handleDropdown = () => {
+
+  const handleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setDropdown((prev) => !prev);
+  };
+
+  const handleItemClick = () => {
+    if (subRoutes) {
+      setDropdown((prev) => !prev);
+    }
   };
 
   useEffect(() => {
@@ -39,33 +48,40 @@ const NavMenuItems: React.FC<INavMenuTypes> = ({ route }) => {
     };
   }, []);
 
+  const isActive = subRoutes
+    ? subRoutes.some((route) => pathname === route.url)
+    : pathname === path;
+
   return (
-    <>
+    <li
+      className={classNames("w-full", {
+        "bg-primary-100 rounded-lg": isActive && !subRoutes,
+      })}
+      ref={menuRef}
+    >
       {subRoutes ? (
-        <li className={`w-full`} onClick={handleDropdown} ref={menuRef}>
+        <>
           <div
             className={classNames(
-              "flex px-3 justify-between items-center w-full",
+              "flex px-3 justify-between items-center w-full cursor-pointer",
               {
-                "bg-primary-100 py-4 rounded-lg": subRoutes?.some(
-                  (route) => pathname === route.url
-                ),
+                "bg-primary-100 py-4 rounded-lg": isActive,
               }
             )}
+            onClick={handleItemClick}
           >
-            <div className={`flex gap-3 tex-white cursor-pointer`}>
-              {subRoutes?.some((route) => pathname === route.url) ? (
+            <div className="flex gap-3 items-center">
+              {isActive ? (
                 <ActiveIcon className="text-xl text-white" />
               ) : (
-                <Image src={icon} alt="icon" />
+                <Image src={icon} alt="icon" width={20} height={20} />
               )}
 
-              <Tooltip title={title} color={`#380ABB`} className="text-black">
+              <Tooltip title={title} color="#380ABB">
                 <p
-                  className={classNames(`text-sm hover:text-primary-100`, {
-                    "text-white hover:text-white": subRoutes?.some(
-                      (route) => pathname === route.url
-                    ),
+                  className={classNames("text-sm", {
+                    "text-white": isActive,
+                    "text-black hover:text-primary-100": !isActive,
                   })}
                 >
                   {truncate(title, 15)}
@@ -73,17 +89,17 @@ const NavMenuItems: React.FC<INavMenuTypes> = ({ route }) => {
               </Tooltip>
             </div>
 
-            <div>
+            <div onClick={handleDropdown}>
               {dropdown ? (
                 <MdArrowDropUp
-                  className={`text-xl cursor-pointer ${"text-white"}`}
+                  className={`text-xl cursor-pointer ${
+                    isActive ? "text-white" : ""
+                  }`}
                 />
               ) : (
                 <RiArrowDropDownLine
                   className={classNames("text-xl cursor-pointer", {
-                    "text-white": subRoutes?.some(
-                      (route) => pathname === route.url
-                    ),
+                    "text-white": isActive,
                   })}
                 />
               )}
@@ -91,46 +107,38 @@ const NavMenuItems: React.FC<INavMenuTypes> = ({ route }) => {
           </div>
 
           <Dropdown subRoutes={subRoutes} dropdown={dropdown} />
-        </li>
+        </>
       ) : (
-        <li
-          className={`px-3 flex justify-between items-center ${
-            pathname === path && "bg-primary-100 py-4 rounded-lg"
-          }`}
+        <Link
+          href={path!}
+          className={classNames("flex px-3 gap-3 items-center w-full", {
+            "bg-primary-100 py-4 rounded-lg": isActive,
+            "disabled:cursor-not-allowed": disabled,
+          })}
+          style={{
+            pointerEvents: disabled ? "none" : "auto",
+          }}
+          aria-disabled={disabled}
         >
-          <Link
-            href={`${path}`}
-            className={`flex gap-3 disabled:cursor-not-allowed`}
-            aria-disabled={true}
-            style={{
-              pointerEvents: disabled ? "none" : "auto",
-            }}
-          >
-            {pathname === path ? (
-              <ActiveIcon className="text-xl text-white" />
-            ) : (
-              <Image src={icon} alt="icon" />
-            )}
+          {isActive ? (
+            <ActiveIcon className="text-xl text-white" />
+          ) : (
+            <Image src={icon} alt="icon" width={20} height={20} />
+          )}
 
-            <Tooltip
-              title={title}
-              color={`#380ABB`}
-              className={`${pathname === path && "text-white"}`}
+          <Tooltip title={title} color="#380ABB">
+            <p
+              className={classNames("text-sm", {
+                "text-white hover:text-white": isActive,
+                "text-black hover:text-primary-100": !isActive,
+              })}
             >
-              <p
-                className={`text-sm text-black ${
-                  pathname === path
-                    ? "hover:text-white"
-                    : "hover:text-primary-100"
-                }`}
-              >
-                {truncate(title, 15)}
-              </p>
-            </Tooltip>
-          </Link>
-        </li>
+              {truncate(title, 15)}
+            </p>
+          </Tooltip>
+        </Link>
       )}
-    </>
+    </li>
   );
 };
 

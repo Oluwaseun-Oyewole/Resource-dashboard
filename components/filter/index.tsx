@@ -60,6 +60,11 @@ const Filter = ({
     setParam(PARAMS_KEYS.SEARCH, query);
   }, 300);
 
+  const handleRefresh = () => {
+    onRefresh();
+    setSearchTerm("");
+  };
+
   return (
     <>
       <div className="py-4 last:lg:py-6 flex flex-col gap-5 lg:gap-0 lg:flex-row justify-between text-sm relative">
@@ -82,7 +87,7 @@ const Filter = ({
           </div>
           <Button
             className="border-[1px] border-gray-300 cursor-pointer !flex rounded-lg !h-[40px] !w-[25%] !text-black items-center justify-center"
-            onClick={onRefresh}
+            onClick={handleRefresh}
           >
             <p>Refresh</p>
             <MdOutlineRefresh />
