@@ -1,5 +1,5 @@
-import { jwtService } from "@/lib/jwt/index";
 import { COOKIES_KEYS } from "@/utils/constants";
+import { getToken } from "next-auth/jwt";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,10 +7,10 @@ export const GET = async (req: NextRequest) => {
   const cookieStore = cookies();
   const getCookiesToken = cookieStore.get(COOKIES_KEYS.TOKEN);
   const userToken = getCookiesToken?.value;
-  const isTokenValid = jwtService.isExpired(userToken!);
-  // const token = await getToken({ req });
+  // const isTokenValid = jwtService.isExpired(userToken!);
+  const token = await getToken({ req });
 
-  if (!isTokenValid) {
+  if (!token) {
     return NextResponse.json(
       { message: "Unauthorized users" },
       { status: 401 }
