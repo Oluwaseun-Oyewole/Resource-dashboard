@@ -1,7 +1,9 @@
 "use client";
+import { EmployeeInterface } from "@/services/types";
+import { PARAMS_KEYS } from "@/utils/constants";
+import { useUrlSearchParams } from "@/utils/hooks/useParamsQuery";
 import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { HiOutlineBackward } from "react-icons/hi2";
 import { IoPlayForwardOutline } from "react-icons/io5";
@@ -11,32 +13,29 @@ type IPagination = {
   title: string;
   totalResults: number;
   page: number;
-  currentPage: number;
   resultsPerPage: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
+  setParams: Dispatch<SetStateAction<EmployeeInterface>>;
+  totalPages: number;
 };
 const HR360Pagination = ({
   total,
   title,
   resultsPerPage,
-  currentPage,
   totalResults,
   page,
-  setCurrentPage,
+  setParams,
 }: IPagination) => {
   const [lowBound, upBound] = [
     totalResults === 0 ? 0 : (page - 1) * resultsPerPage + 1,
     totalResults > page * resultsPerPage ? page * resultsPerPage : totalResults,
   ];
-  const searchParams = useSearchParams();
-  const { replace } = useRouter();
-  const pathname = usePathname();
+
+  console.log("total - ", total, "title", totalResults);
+  const { setParam } = useUrlSearchParams();
 
   const onChange: PaginationProps["onChange"] = (page) => {
-    const params = new URLSearchParams(searchParams as any);
-    params.set("page", page.toString());
-    setCurrentPage(page);
-    replace(`${pathname}?${params.toString()}`);
+    setParam(PARAMS_KEYS.PAGE, page);
+    setParams((prev) => ({ ...prev, page }));
   };
   return (
     <div className="md:flex justify-between items-center py-5">
@@ -48,12 +47,14 @@ const HR360Pagination = ({
         <span className="text-gray-500">{title}</span>
       </div>
       <Pagination
-        current={currentPage}
+        current={page}
         onChange={onChange}
         total={total}
+        simple={false}
         pageSize={resultsPerPage}
         showQuickJumper={false}
         showPrevNextJumpers={true}
+        showLessItems
         className="flex items-center md:justify-center"
         prevIcon={
           <div className="bg-[#F5F5F5] p-2 rounded-lg">

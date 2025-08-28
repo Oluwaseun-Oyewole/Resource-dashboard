@@ -1,3 +1,4 @@
+import { EmployeeInterface } from "@/services/types";
 import { Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd/es/table";
 import React, { Dispatch, SetStateAction } from "react";
@@ -10,13 +11,13 @@ export interface TableParams {
 interface ITableProps extends TableProps<any> {
   title: any | undefined;
   total: number;
-  currentPage: number;
   totalResults: number;
   page: number;
   resultsPerPage: number;
   isPaginate?: boolean;
   width?: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
+  setParams: Dispatch<SetStateAction<EmployeeInterface>>;
+  totalPages: number;
 }
 
 const HR360Table: React.FC<ITableProps> = ({
@@ -27,12 +28,12 @@ const HR360Table: React.FC<ITableProps> = ({
   totalResults,
   page,
   resultsPerPage,
-  currentPage,
   total,
-  setCurrentPage,
   title,
   isPaginate = true,
   width,
+  setParams,
+  totalPages,
   ...rest
 }) => {
   let locale = {
@@ -63,9 +64,9 @@ const HR360Table: React.FC<ITableProps> = ({
           title={title}
           totalResults={totalResults}
           page={page}
-          currentPage={currentPage}
           resultsPerPage={resultsPerPage}
-          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          setParams={setParams}
         />
       )}
     </>

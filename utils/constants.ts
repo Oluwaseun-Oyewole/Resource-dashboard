@@ -400,7 +400,7 @@ export const PARAMS_KEYS = {
   ROLE: "role",
   SEARCH: "searchQuery",
   PAGE: "page",
-  RESULT_PER_PAGE: "resultPerPage",
+  RESULT_PER_PAGE: "resultsPerPage",
   DATE: "date",
 };
 export const ROLES = [

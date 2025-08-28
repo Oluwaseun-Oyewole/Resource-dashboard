@@ -15,7 +15,7 @@ import { useRef, useState } from "react";
 
 export default function TableFilters() {
   const { getParam, setParam, clearParams } = useUrlSearchParams();
-  const [currentPage, setCurrentPage] = useState(+getParam(PARAMS_KEYS.PAGE)!);
+  const currentPage = +getParam(PARAMS_KEYS.PAGE)!;
   const role = getParam(PARAMS_KEYS.ROLE)!;
   const query = getParam(PARAMS_KEYS.SEARCH)!;
   const date = getParam(PARAMS_KEYS.DATE)!;
@@ -174,12 +174,12 @@ export default function TableFilters() {
         pagination={false}
         title="employees"
         total={employees?.data?.totalResults ?? 0}
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
         resultsPerPage={employees?.data?.resultsPerPage ?? 10}
         totalResults={employees?.data?.totalResults ?? 0}
+        totalPages={employees?.data?.totalPages}
         page={employees?.data?.page ?? currentPage}
         width={1300}
+        setParams={setParams}
       />
     </main>
   );
