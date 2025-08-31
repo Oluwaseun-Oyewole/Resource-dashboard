@@ -14,7 +14,7 @@ const MetricsCard = ({
   isLoading,
 }: IMetrics) => {
   return (
-    <div className="py-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="py-6 grid grid-cols-1 md:grid-cols-3 gap-4">
       {metrics?.map((el, i) => (
         <div
           className={classNames(

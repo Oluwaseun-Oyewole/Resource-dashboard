@@ -30,7 +30,6 @@ const HR360Pagination = ({
     totalResults > page * resultsPerPage ? page * resultsPerPage : totalResults,
   ];
 
-  console.log("total - ", total, "title", totalResults);
   const { setParam } = useUrlSearchParams();
 
   const onChange: PaginationProps["onChange"] = (page) => {
